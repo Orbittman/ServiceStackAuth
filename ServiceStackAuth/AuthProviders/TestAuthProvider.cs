@@ -16,11 +16,6 @@
             Provider = "TestAuthProvider";
         }
 
-        public override bool IsAuthorized(IAuthSession session, IOAuthTokens tokens, Auth request = null)
-        {
-            return base.IsAuthorized(session, tokens, request);
-        }
-
         public override object Authenticate(ServiceStack.ServiceInterface.IServiceBase authService, IAuthSession session, Auth request)
         {
             if (base.TryAuthenticate(authService, request.UserName, request.Password))
