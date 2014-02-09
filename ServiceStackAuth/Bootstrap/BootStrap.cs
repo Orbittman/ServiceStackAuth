@@ -8,6 +8,8 @@
 
     using ServiceStackAuth.AuthProviders;
     using ServiceStackAuth.Services;
+    using ServiceStackAuth.Services.Requests;
+    using ServiceStackAuth.Sessions;
 
     public class BootStrap
         : AppHostBase
@@ -25,7 +27,8 @@
 
             Routes.Add<AuthenticationRequest>("/authentication")
                   .Add<AuthenticationRequest>("/authentication/{UserName}/{Password}")
-                  .Add<ClaimsRequest>("/claims");
+                  .Add<ClaimsRequest>("/claims")
+                  .Add<SecuredServiceRequest>("/secure");
 
             var authFeature = 
                 new AuthFeature(
@@ -39,10 +42,5 @@
 
             Plugins.Add(authFeature);
         }
-    }
-
-    public class CustomSession : AuthUserSession
-    {
-        public string[] Claims { get; set; }
     }
 }

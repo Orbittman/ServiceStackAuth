@@ -1,7 +1,5 @@
-﻿namespace ServiceStackAuth.Services
+﻿namespace ServiceStackAuth.Services.Requests
 {
-    using ServiceStack.ServiceHost;
-
     public class AuthenticationRequest
     {
         public string Id { get; set; }

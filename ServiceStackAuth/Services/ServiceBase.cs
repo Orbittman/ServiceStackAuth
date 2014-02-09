@@ -9,6 +9,7 @@ namespace ServiceStackAuth.Services
     using ServiceStack.ServiceInterface.Auth;
 
     using ServiceStackAuth.Bootstrap;
+    using ServiceStackAuth.Sessions;
 
     public class ServiceBase
         : Service

@@ -1,8 +1,12 @@
 ﻿namespace ServiceStackAuth.Services
 {
-    using ServiceStack.ServiceInterface;
+    using System;
 
-    [Authenticate]
+    using ServiceStackAuth.Attributes;
+    using ServiceStackAuth.Services.Requests;
+    using ServiceStackAuth.Services.Responses;
+
+    [AuthenticateClaims("http://cc.vouchercloud.com/claims/read")]
     public class ClaimsService
         : ServiceBase
     {
@@ -10,14 +14,5 @@
         {
             return new ClaimsResponse { Claims = UserSession.Claims };
         }
-    }
-
-    public class ClaimsRequest
-    {
-    }
-
-    public class ClaimsResponse
-    {
-        public string[] Claims { get; set; }
     }
 }

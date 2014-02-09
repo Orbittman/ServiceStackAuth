@@ -1,22 +1,28 @@
 ﻿namespace ServiceStackAuth.AuthProviders
 {
-    using System.Collections.Generic;
     using System.Net;
 
     using ServiceStack.Common.Web;
     using ServiceStack.ServiceInterface;
     using ServiceStack.ServiceInterface.Auth;
-    using ServiceStack.ServiceInterface.ServiceModel;
 
     public class TestAuthProvider
         : CredentialsAuthProvider
     {
         public TestAuthProvider()
         {
-            Provider = "TestAuthProvider";
+            Provider = Name;
         }
 
-        public override object Authenticate(ServiceStack.ServiceInterface.IServiceBase authService, IAuthSession session, Auth request)
+        public static new string Name
+        {
+            get
+            {
+                return "TestAuthProvider";
+            }
+        }
+
+        public override object Authenticate(IServiceBase authService, IAuthSession session, Auth request)
         {
             if (base.TryAuthenticate(authService, request.UserName, request.Password))
             {
@@ -24,8 +30,10 @@
                 {
                     session.UserAuthName = request.UserName;
                 }
-                this.OnAuthenticated(authService, session, (IOAuthTokens)null, (Dictionary<string, string>)null);
-                return new AuthResponse()
+
+                this.OnAuthenticated(authService, session, null, null);
+
+                return new AuthResponse
                 {
                     UserName = request.UserName,
                     SessionId = session.Id,

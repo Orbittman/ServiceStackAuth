@@ -6,9 +6,21 @@
     using ServiceStack.ServiceInterface;
     using ServiceStack.ServiceInterface.Auth;
 
+    using ServiceStackAuth.AuthProviders;
+    using ServiceStackAuth.Queries;
+    using ServiceStackAuth.Services.Requests;
+    using ServiceStackAuth.Services.Responses;
+
     public class AuthenticationService
         : ServiceBase
     {
+        private readonly IClaimsQuery _claimsQuery;
+
+        public AuthenticationService(IClaimsQuery claimsQuery)
+        {
+            _claimsQuery = claimsQuery;
+        }
+
         public AuthenticationResponse Delete(AuthenticationRequest logout)
         {
             using (var authService = ResolveService<AuthService>())
@@ -29,7 +41,7 @@
                                          {
                                              Password = request.Password, 
                                              UserName = request.UserName,
-                                             provider = "TestAuthProvider",
+                                             provider = TestAuthProvider.Name,
                                              RememberMe = false
                                          });
 
@@ -40,7 +52,7 @@
             }
 
             UserSession.IsAuthenticated = true;
-            UserSession.Claims = new[] { "Claim1", "Claim2" };
+            UserSession.Claims = _claimsQuery.GetClaims(UserSession.UserName);
             this.SaveSession(UserSession);
 
             return new AuthenticationResponse();

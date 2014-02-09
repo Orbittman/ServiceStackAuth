@@ -4,9 +4,19 @@
 
     using ServiceStack.ServiceInterface.Auth;
 
+    using ServiceStackAuth.Models.Requests;
+    using ServiceStackAuth.Queries;
+
     public class TestAuthRepository
         : IUserAuthRepository
     {
+        private readonly IUserQuery _userQuery;
+
+        public TestAuthRepository(IUserQuery userQuery)
+        {
+            this._userQuery = userQuery;
+        }
+
         public UserAuth CreateUserAuth(UserAuth newUser, string password)
         {
             throw new System.NotImplementedException();
@@ -24,9 +34,11 @@
 
         public bool TryAuthenticate(string userName, string password, out UserAuth userAuth)
         {
-            userAuth = new UserAuth { UserName = userName, Permissions = new List<string> { "admin" } };
+            userAuth = new UserAuth { UserName = userName };
 
-            if (userName == "test" && password == "test")
+            var user = _userQuery.Execute(new UserByUserNameRequest { UserName = userName }).Result;
+
+            if (user != null && user.Password == password)
             {
                 return true;
             }
